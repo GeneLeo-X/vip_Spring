@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--Spring核心配置文件，大家默认习惯命名 applicationContext.xml 非强制 -->
+
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!--context : 最重要的就是配置注解扫描的 - 支持配置多个
+        base-package : 扫描的基本路径（只有这个目录下面的类中编写的注解 才可以生效）
+    -->
+    <!--<context:component-scan base-package="com.lovecoding.annotation"/>
+    <context:component-scan base-package="com.lovecoding.bean"/>-->
+    <context:component-scan base-package="com.lixiuchun"/>
+
+    <bean name="p2" class="com.lixiuchun.annotation.bean.Pig">
+        <property name="name" value="佩奇"></property>
+    </bean>
+</beans>
+
+

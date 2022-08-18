@@ -1,8 +1,10 @@
 package com.lixiuchun.test;
 
 
+import com.lixiuchun.annotation.User;
+import com.lixiuchun.annotation.bean.Pig;
 import com.lixiuchun.bean.Person;
-import com.lixiuchun.bean.User;
+
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -14,20 +16,20 @@ public class AnnotationTest {
      */
     @Test
     public void testFn7(){
-        ApplicationContext applicationContext = new ClassPathXmlApplicationContext("classpath:com/lovecoding/annotation/annotation.xml");
+        ApplicationContext applicationContext = new ClassPathXmlApplicationContext("classpath:com/lixiuchun/annotation/annotation.xml");
 
         User user = (User)applicationContext.getBean("user");
 
-        User user1 = (User)applicationContext.getBean("user");
+        //User user1 = (User)applicationContext.getBean("user");
 
         System.out.println(user);
 
 
-        Person person = (Person) applicationContext.getBean("person");
+//        Person person = (Person) applicationContext.getBean("person");
+//
+//        System.out.println(person);
 
-        System.out.println(person);
-
-        /*Pig pig = (Pig)applicationContext.getBean("pig");
-        System.out.println(pig);*/
+        Pig pig = (Pig)applicationContext.getBean("pig");
+        System.out.println(pig);
     }
 }

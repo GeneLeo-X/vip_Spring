@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--Spring核心配置文件，大家默认习惯命名 applicationContext.xml 非强制 -->
+
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd ">
+
+    <!--context : 最重要的就是配置注解扫描的 - 支持配置多个
+        base-package : 扫描的基本路径（只有这个目录下面的类中编写的注解 才可以生效）
+    -->
+    <context:component-scan base-package="com.lovecoding"/>
+    <bean name="myAdvice" class="com.lovecoding.aop.MyAdvice"></bean>
+
+    <!--execution : 执行切点表达式的  常规格式 -  修饰符 返回值类型 包名.类名.方法名(参数)
+       .. : 方法的参数数量任意，且类型任意
+       *  : 修饰符任意，返回值类型任意
+        -->
+    <aop:config>
+
+        <aop:pointcut id="pc" expression="execution(* com.lovecoding.aop.service.impl.*.*(..))"/>
+        <aop:aspect ref="myAdvice">
+            <aop:before method="beforeAdvice" pointcut-ref="pc"></aop:before>
+            <!--after-returning : 方法正常运行后的通知 -->
+            <aop:after-returning method="afterAdvice" pointcut-ref="pc"/>
+            <aop:after-throwing method="afterThrowingAdvice" pointcut-ref="pc"/>
+            <aop:after method="finalAdvice" pointcut-ref="pc"/>
+            <!--若配置了环绕通知，出现异常之后，环绕后通知就会失效，异常通知也不会正常执行，只有最终通知一定会通知的-->
+            <aop:around method="aroundAdvice" pointcut-ref="pc"/>
+        </aop:aspect>
+    </aop:config>
+
+    <!--开启aop注解驱动配置，可以使用注解配置AOP了-->
+    <aop:aspectj-autoproxy></aop:aspectj-autoproxy>
+</beans>
+
+
