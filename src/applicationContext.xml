@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--Spring核心配置文件，大家默认习惯命名 applicationContext.xml -->
+
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd ">
+
+    <!--
+        class : 类的全路径。（除非配置了包的别名识别）
+        name : 给配置的实体起个别名。不写name也会有个默认的名称- 类的首字母小写
+                可以重复，一个实体可以起多个名称 使用的逗号分隔 (n1 , n2 , n2 , n3 ) 了解即可
+                只能在同一个bean的配置中，还必须挨着编写
+
+        id : 给实体对象起名字的。与name非常相似 。id名唯一，不可以重复  - 推荐使用的
+
+        注意：：多个实体bean之间 无论是id还是name都不可以重复 .无论是id还是name都要满足 xml语法的命名规范
+
+        scope : 控制的对象的实例数量 。
+                singleton ： 默认属性，单例的
+                prototype : 多例的， ：不经常使用的
+
+        init-method : 控制初始化方法设定 - 简单了解
+        destroy-method ： 配置销毁时，要关闭流、数据库连接等
+        factory-method : 配置静态工厂实例对象时使用 - 配置静态方法
+                    若该属性配置的是实例工厂创建对象时，需要与factory-bean 属性配合使用
+
+        DI : 依赖注入 （Dependency Injection）
+            注入方式：
+                set方法注入
+                字段注入
+                构造方法注入
+            注入类型：
+                简单数据类型 （8种）
+                引用的数据类型
+                表达式方式
+                复杂类型的注入
+
+          Spring容器创建对象的方式（三种）
+          1、通过无参构造方法创建
+          2、静态工厂
+          3、实例工厂
+    -->
+    <bean name="user"  scope="prototype"  class="com.lixiuchun.bean.User"></bean>
+
+    <bean name="a1 ,a1 , a2 , a3 , a4"  class="com.lixiuchun.bean.User"></bean>
+
+    <bean id="u1" init-method="init" destroy-method="destroy" class="com.lixiuchun.bean.User"></bean>
+
+
+    <bean name="user2" factory-method="createUser" class="com.lixiuchun.util.UserFactory"></bean>
+
+
+    <bean name="userFactory" class="com.lixiuchun.util.UserFactory"></bean>
+
+    <bean name="user3" factory-method="createUser2" factory-bean="userFactory"></bean>
+
+
+    <!--
+
+     DI : 依赖注入 （Dependency Injection）
+            注入方式：
+                set方法注入
+                字段注入
+                构造方法注入
+            注入类型：
+                简单数据类型 （8种）
+                引用的数据类型
+                表达式方式
+                复杂类型的注入
+    -->
+    <bean name="person" class="com.lixiuchun.bean.Person">
+        <!--set方法注入  值类型-->
+        <property name="name" value="zhangsan"></property>
+        <property name="age" value="33"></property>
+        <property name="height" value="178"></property>
+        <!--ref : 引用的是配置文件中的 bean标签配置的实体对象 名称/ID都可以
+            ref ： 操作的是引用数据类型的注入
+        -->
+        <property name="car" ref="car"></property>
+    </bean>
+
+    <bean name="car" class="com.lixiuchun.bean.Car">
+        <!--构造方法注入
+            index : 参数的索引位置 从0开始
+            type : 限制参数的对应类型
+        -->
+        <constructor-arg name="price" value="39999" index="0"></constructor-arg>
+        <constructor-arg name="color" value="33" type="java.lang.Integer"></constructor-arg>
+    </bean>
+
+    <bean name="p1" class="com.lixiuchun.bean.Person">
+        <!--SPEL表达式注入
+            #{} : 读取Spring容器中配置的bean实体对象中的属性
+        -->
+        <property name="name" value="#{person.name}"></property>
+        <property name="age" value="23"></property>
+        <property name="height" value="#{person.height}"></property>
+        <property name="car" ref="car"></property>
+    </bean>
+
+    <bean name="collectionDemo" class="com.lixiuchun.bean.CollectionDemo">
+        <!--复杂类型注入-->
+        <property name="list">
+            <!--底层实现是数组所以，Spring标签 <array>与<list>都可以兼容-->
+            <array>
+                <value>张三</value>
+                <value>李四</value>
+                <value>33</value>
+            </array>
+        </property>
+
+        <property name="map">
+            <map>
+                <!--
+                    key : 来引用字符串与基本数据类型
+                    key-ref ： 自定义类型的、第三方jar、jdk包下面的
+                -->
+                <entry key="k1" value="val1"></entry>
+                <entry key-ref="car" value="val2"></entry>
+                <entry key-ref="p1" value-ref="car"></entry>
+            </map>
+        </property>
+
+        <property name="properties">
+            <props>
+                <prop key="jdbc.username">root</prop>
+                <prop key="jdbc.password">666</prop>
+            </props>
+        </property>
+
+        <property name="arr">
+            <array>
+                <value>111</value>
+                <value>222</value>
+            </array>
+        </property>
+    </bean>
+</beans>
+
+
